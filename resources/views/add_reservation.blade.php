@@ -24,6 +24,8 @@
         <input type="date" name="from">
         <label for="to">To: </label>
         <input type="date" name="to">
+        <label for="typeRoom"> Room type: </label>
+        <input type="number" name="typeRoom">
 
         <input type="submit" value="Reservation">     
 

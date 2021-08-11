@@ -10,7 +10,7 @@ use App\Models\Reservation;
 class PageRoomController extends Controller
 {
 
-    protected $id_r,$i,$d,$od,$do_0,$id,$firstname,$surname,$numberPhone,$address,$mailAddress,$id_c,$from,$to,$typeRoom,$glob_status_s,$glob_status_e;
+    protected $id_0,$i,$d,$od,$do_0,$id,$firstname,$surname,$numberPhone,$address,$mailAddress,$id_c,$from,$to,$typeRoom,$glob_status_s,$glob_status_e;
 
     public function show_empty_room(Request $request)
     {
@@ -70,6 +70,7 @@ class PageRoomController extends Controller
     public function is_Free()
     {
         $this->i=0;
+        $this->id_0;
 
         $isFree=[
             
@@ -101,7 +102,7 @@ class PageRoomController extends Controller
                 {
                     foreach($rooms as $r)
                     {
-                        if($r->id===$res->id_r) 
+                        if($r->id===$res->id_r && $this->from>=$res->from && $this->to<=$res->to || $r->id===$res->id_r && $this->from==$res->from || $r->id===$res->id_r && $this->to==$res->to) 
                         {
                             $this->i++;
 
@@ -111,6 +112,7 @@ class PageRoomController extends Controller
                             $isFree["to"]=$res->to;
 
                         }
+                        else $this->id_0=$r->id;
 
                     }
 
@@ -141,6 +143,9 @@ class PageRoomController extends Controller
         $this->numberPhone=$request->input('number_phone');
         $this->address=$request->input('address');
         $this->mailAddress=$request->input('mail_address');
+        $this->from=$request->input('from');
+        $this->to=$request->input('to');
+        $this->typeRoom=$request->input('typeRoom');
 
         $save=Customer::create([
 
@@ -152,15 +157,16 @@ class PageRoomController extends Controller
 
         ]);
 
-        return "Data has been saved!";
+        $this->searchRoom();
+
+        echo $this->glob_status_s;
+
+        if($this->glob_status_s=="Zajete") redirect('/home/insertForReservation');
+        else return $this->insertReservation();
 
     }
-    public function insertReservation(Request $request)
+    public function insertReservation()
     {
-        $this->id_r=$request->input('id_r');
-        $this->from=$request->input('from');
-        $this->to=$request->input('to');
-
         $customers=Customer::where('mail_address',$this->mailAddress)->get();
 
         foreach($customers as $c)
@@ -170,7 +176,7 @@ class PageRoomController extends Controller
         }
 
         $save=Reservation::create([
-            'id_r'=>$this->id_r,
+            'id_r'=>$this->id_0,
             'id_c'=>$this->id_c,
             'from'=>$this->from,
             'to'=>$this->to
@@ -178,11 +184,8 @@ class PageRoomController extends Controller
         ]);
 
     }
-    public function searchRoom(Request $request)
+    public function searchRoom()
     {
-        //$this->typeRoom=$request->input('typeRoom');
-
-        $this->typeRoom=2;
         $this->glob_status="";
 
         $this->is_Free();
@@ -190,8 +193,33 @@ class PageRoomController extends Controller
         return $this->glob_status_s;
 
     }
-    public function canceledReservation(Request $request)
+    public function searchMail(Request $request)
     {
+        $this->mailAddress=$request->input('mail_address');
+
+         $customers=Customer::where('mail_address',$this->mailAddress)->get();
+
+        foreach($customers as $c)
+        {
+            $this->id_c=$c->id;
+
+        }
+
+        $reservations=Reservation::where('id_c',$this->id_c)->get();
+
+        return $this->mailAddress;
+
+    }
+    public function canceledReservation()
+    {
+
+        return view('canceledReservation');
+    }
+
+    public function canceledReservation_0(Request $request)
+    {
+
+        $reservations=Reservation::where('id_c',$this->id_c)->delete();
 
     }
 

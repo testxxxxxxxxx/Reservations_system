@@ -24,3 +24,5 @@ Route::get('/home/show_empty_room','App\Http\Controllers\PageRoomController@show
 Route::get('/home/insertCustomers','App\Http\Controllers\PageRoomController@insertCustomers');
 Route::get('/home/insertForReservation','App\Http\Controllers\PageRoomController@insertForReservation');
 Route::get('/home/searchRoom','App\Http\Controllers\PageRoomController@searchRoom');
+Route::get('/home/searchMail','App\Http\Controllers\PageRoomController@searchMail');
+Route::get('/home/canceledReservation','App\Http\Controllers\PageRoomController@canceledReservation');
