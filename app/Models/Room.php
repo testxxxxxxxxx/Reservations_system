@@ -10,6 +10,14 @@ class Room extends Model
     use HasFactory;
 
     protected $table="room";
+    protected $fillable=[
+
+        "id",
+        "number",
+        "number_people",
+        "equipment"
+
+    ];
 
     public function Reservation()
     {

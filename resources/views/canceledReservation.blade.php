@@ -14,6 +14,15 @@
 
     </form>
 
+    @isset($reservation_table)
+
+        @foreach($reservation_table as $res_t)
+
+            {{$res_t}} <br>
+
+        @endforeach
+
+    @endisset
     
 
 </body>

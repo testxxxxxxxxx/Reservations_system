@@ -13,16 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',[App\Http\Controllers\PageRoomController::class,'index'])->name('index');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/home/show_empty_room','App\Http\Controllers\PageRoomController@show_empty_room');
-Route::get('/home/insertCustomers','App\Http\Controllers\PageRoomController@insertCustomers');
-Route::get('/home/insertForReservation','App\Http\Controllers\PageRoomController@insertForReservation');
-Route::get('/home/searchRoom','App\Http\Controllers\PageRoomController@searchRoom');
-Route::get('/home/searchMail','App\Http\Controllers\PageRoomController@searchMail');
-Route::get('/home/canceledReservation','App\Http\Controllers\PageRoomController@canceledReservation');
+Route::get('show_empty_room',[App\Http\Controllers\PageRoomController::class,'show_empty_room'])->name('show_empty_room');
+Route::get('insertCustomers',[App\Http\Controllers\PageRoomController::class,'insertCustomers'])->name("insertCustomers");
+Route::get('insertForReservation',[App\Http\Controllers\PageRoomController::class,'insertForReservation'])->name("insertForReservation");
+Route::get('searchRoom',[App\Http\Controllers\PageRoomController::class,'searchRoom'])->name('searchRoom');
+Route::get('searchMail',[App\Http\Controllers\PageRoomController::class,'searchMail'])->name('searchMail');
+Route::get('canceledReservation',[App\Http\Controllers\PageRoomController::class,'canceledReservation'])->name("canceledReservation");
+Route::get('canceledReservationDelete',[App\Http\Controllers\PageRoomController::class,'canceledReservationDelete'])->name("canceledReservationDelete");
