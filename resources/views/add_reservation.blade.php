@@ -19,7 +19,7 @@
         <label for="address"> Address: </label>
         <input type="text" name="address">
         <label for="mail_address"> Mail address: </label>
-        <input type="text" name="mail_address">
+        <input type="email" name="mail_address">
         <label for="from">From: </label>
         <input type="date" name="from">
         <label for="to">To: </label>

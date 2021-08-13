@@ -10,7 +10,7 @@ use App\Models\Reservation;
 class PageRoomController extends Controller
 {
 
-    protected $id_0,$i,$d,$od,$do_0,$id,$firstname,$surname,$numberPhone,$address,$mailAddress,$id_c,$from,$to,$typeRoom,$glob_status_s,$glob_status_e,$editField;
+    protected $id_0,$i,$d,$od,$do_0,$id,$firstname,$surname,$numberPhone,$address,$mailAddress,$id_c,$from,$to,$typeRoom,$glob_status_s,$glob_status_e,$editField,$in;
     protected array $id_tables=[];
 
     public function index()
@@ -126,7 +126,7 @@ class PageRoomController extends Controller
                     {
                         foreach($rooms as $r)
                         {
-                            if($r->id===$res->id_r && $this->from>=$res->from && $this->to<=$res->to || $r->id===$res->id_r && $this->from==$res->from || $r->id===$res->id_r && $this->to==$res->to || $r->id==$res->id_r && $this->from==$res->to || $r->id==$res->id_r && $this->to==$res->from) 
+                            if($r->id===$res->id_r && $this->from>=$res->from && $this->to<=$res->to || $r->id===$res->id_r && $this->from==$res->from || $r->id===$res->id_r && $this->to==$res->to || $r->id==$res->id_r && $this->from==$res->to || $r->id==$res->id_r && $this->to==$res->from || $r->id==$res->id_r && $this->from>=$res->to && $this->to<=$res->from) 
                             {
                                 $this->i++;
 
@@ -221,8 +221,21 @@ class PageRoomController extends Controller
     }
     public function searchMail(Request $request)
     {
-        $reservation_table=[];
+        $reservation_table=[
+
+            [
+                "id"=>NULL,
+                "id_r"=>NULL,
+                "id_c"=>NULL,
+                "from"=>NULL,
+                "to"=>NULL
+
+            ],
+
+        ];
         $reservations="";
+        $this->in=0;
+        $res=false;
 
         $this->mailAddress=$request->input('mail_address');
 
@@ -242,19 +255,36 @@ class PageRoomController extends Controller
 
             foreach($reservations as $res)
             {
-                array_push($reservation_table,$res->id,$res->id_r,$res->id_c,$res->from,$res->to);
+                //array_push($reservation_table,$res->id,$res->id_r,$res->id_c,$res->from,$res->to);
+
+                $reservation_table[$this->in]["id"]=$res->id;
+                $reservation_table[$this->in]["id_r"]=$res->id_r;
+                $reservation_table[$this->in]["id_c"]=$res->id_c;
+                $reservation_table[$this->in]["from"]=$res->from;
+                $reservation_table[$this->in]["to"]=$res->to;
+
+                $this->in++;
 
             }
 
         }
 
-        return view('canceledReservation',compact('reservation_table'));
+        return view('canceledReservation',compact('reservation_table','res'));
 
+    }
+    public function editReservationForms(Request $request)
+    {
+        $id_u=$request->input('id');
+
+        $res=true;
+
+        return view('canceledReservation',compact('res','id_u'));
     }
     public function canceledReservation()
     {
+        $res=false;
 
-        return view('canceledReservation');
+        return view('canceledReservation',compact('res'));
     }
     public function editReservation(Request $request)
     {
@@ -262,7 +292,17 @@ class PageRoomController extends Controller
         $this->from=$request->input('from');
         $this->to=$request->input('to');
 
-        $reservations=Reservation::where('id',$this->id)->update(["from"=>$this->from,"to"=>$this->to]);
+        $this->is_Free();
+
+        if($this->glob_status_s=="Zajete") return redirect()->route('canceledReservation');
+        else
+        {
+
+            $reservations=Reservation::where('id',$this->id)->update(["from"=>$this->from,"to"=>$this->to]);
+
+            return redirect()->route('canceledReservation');
+
+        }
 
     }
     public function canceledReservationDelete(Request $request)
@@ -270,6 +310,8 @@ class PageRoomController extends Controller
         $this->id=$request->input('id');
 
         $reservations=Reservation::where('id',$this->id)->delete();
+
+        return redirect()->route('canceledReservation');
 
     }
 
