@@ -23,6 +23,7 @@ Route::get('insertCustomers',[App\Http\Controllers\PageRoomController::class,'in
 Route::get('insertForReservation',[App\Http\Controllers\PageRoomController::class,'insertForReservation'])->name("insertForReservation");
 Route::get('searchRoom',[App\Http\Controllers\PageRoomController::class,'searchRoom'])->name('searchRoom');
 Route::get('searchMail',[App\Http\Controllers\PageRoomController::class,'searchMail'])->name('searchMail');
+Route::get('reservationResult',[App\Http\Controllers\PageRoomController::class,'reservationResult'])->name('reservationResult');
 Route::get('canceledReservation',[App\Http\Controllers\PageRoomController::class,'canceledReservation'])->name("canceledReservation");
 Route::get('editReservationForms',[App\Http\Controllers\PageRoomController::class,'editReservationForms'])->name('editReservationForms');
 Route::get('editReservation',[App\Http\Controllers\PageRoomController::class,'editReservation'])->name('editReservation');

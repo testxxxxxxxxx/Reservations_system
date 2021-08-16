@@ -187,7 +187,7 @@ class PageRoomController extends Controller
 
         echo $this->glob_status_s;
 
-        if($this->glob_status_s=="Zajete") redirect()->route('insertForReservation');
+        if($this->glob_status_s==="Zajete") return redirect()->route("reservationResult");
         else return $this->insertReservation();
 
     }
@@ -209,14 +209,14 @@ class PageRoomController extends Controller
             
         ]);
 
+        return redirect()->route("insertForReservation");
+
     }
     public function searchRoom()
     {
         $this->glob_status="";
 
         $this->is_Free();
-
-        return $this->glob_status_s;
 
     }
     public function searchMail(Request $request)
@@ -272,13 +272,38 @@ class PageRoomController extends Controller
         return view('canceledReservation',compact('reservation_table','res'));
 
     }
+    public function reservationResult()
+    {
+        $stat=$this->glob_status_s;
+
+        return view('reservation_result',compact('stat'));
+    }
     public function editReservationForms(Request $request)
     {
         $id_u=$request->input('id');
+        $from_d=$request->input('from');
+        $to_d=$request->input('to');
+
+        $reservations=Reservation::where('id',$id_u)->get();
+
+        foreach($reservations as $res)
+        {
+            $id_room=$res->id_r;
+
+        }
+
+        $rooms=Room::where('id',$id_room)->get();
+
+        foreach($rooms as $r)
+        {
+            $roomType=$r->number_people;
+
+        }
 
         $res=true;
 
-        return view('canceledReservation',compact('res','id_u'));
+        return view('canceledReservation',compact('res','id_u','roomType','from_d','to_d'));
+
     }
     public function canceledReservation()
     {
@@ -289,8 +314,11 @@ class PageRoomController extends Controller
     public function editReservation(Request $request)
     {
         $this->id=$request->input('id');
+        $this->typeRoom=$request->input('typeRoom');
         $this->from=$request->input('from');
         $this->to=$request->input('to');
+
+        $this->glob_status_s="";
 
         $this->is_Free();
 

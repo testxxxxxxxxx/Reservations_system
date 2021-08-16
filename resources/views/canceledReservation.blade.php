@@ -24,7 +24,7 @@
             {{$res_t["from"]}} <br>
             {{$res_t["to"]}} <br>
 
-            <a href="editReservationForms?id={{$res_t['id']}}"><input type="submit" value="Edit"></a>
+            <a href="editReservationForms?id={{$res_t['id']}}&from={{$res_t['from']}}&to={{$res_t['to']}}"><input type="submit" value="Edit"></a>
             <a href="canceledReservationDelete?id={{$res_t['id']}}"><input type="submit" value="Delete"></a> <br>
 
         @endforeach
@@ -35,10 +35,12 @@
 
     <form name="a" method="get" action="editReservation">
 
+    <label for="typeRoom">Room type: </label>
+    <input type="number" name="typeRoom" value="{{$roomType}}">
     <label for="from"> From:  </label>
-    <input type="date" name="from">
+    <input type="date" name="from" value="{{$from_d}}">
     <label for="to"> To: </label>
-    <input type="date" name="to">
+    <input type="date" name="to" value="{{$to_d}}">
     <input type="hidden" name="id" value="{{$id_u}}">
 
     <input type="submit" value="Save">
