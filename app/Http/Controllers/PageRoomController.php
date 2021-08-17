@@ -10,7 +10,7 @@ use App\Models\Reservation;
 class PageRoomController extends Controller
 {
 
-    protected $id_0,$i,$d,$od,$do_0,$id,$firstname,$surname,$numberPhone,$address,$mailAddress,$id_c,$from,$to,$typeRoom,$glob_status_s,$glob_status_e,$editField,$in;
+    protected $id_0,$i,$d,$od,$do_0,$id,$firstname,$surname,$numberPhone,$address,$mailAddress,$id_c,$from,$to,$typeRoom,$glob_status_s,$glob_status_e,$editField,$in,$currentDateFrom,$currentDateTo;
     protected array $id_tables=[];
 
     public function index()
@@ -284,6 +284,8 @@ class PageRoomController extends Controller
         $from_d=$request->input('from');
         $to_d=$request->input('to');
 
+        $reservations=Reservation::where('id',$id_u)->update(["from"=>"2000/01/01","to"=>"2000/01/02"]);
+
         $reservations=Reservation::where('id',$id_u)->get();
 
         foreach($reservations as $res)
@@ -317,12 +319,20 @@ class PageRoomController extends Controller
         $this->typeRoom=$request->input('typeRoom');
         $this->from=$request->input('from');
         $this->to=$request->input('to');
+        $this->currentDateFrom=$request->input('from_d');
+        $this->currentDateTo=$request->input('to_d');
 
         $this->glob_status_s="";
 
         $this->is_Free();
 
-        if($this->glob_status_s=="Zajete") return redirect()->route('canceledReservation');
+        if($this->glob_status_s=="Zajete")
+        {
+            $reservations=Reservation::where('id',$this->id)->update(['from'=>$this->currentDateFrom,'to'=>$this->currentDateTo]);
+
+            return 'from: '.$this->currentDateFrom;
+
+        }
         else
         {
 
