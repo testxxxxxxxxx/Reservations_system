@@ -104,7 +104,6 @@ class PageRoomController extends Controller
                 else 
                 {
                     $status="Room do not exists!";
-
                     
                 }
 
