@@ -51,18 +51,22 @@
 													<input type="submit" value="Check">
 											
 												</form>
+
+												<a href="/"> Powrót</a>
 											
 												@isset($reservation_table)
+
+												   <div class="text"> Twoje rezerwacje: </div>
 											
 													@foreach($reservation_table as $res_t)
 
                                                       <div class="text">
 											
-														{{$res_t["id"]}} <br>
-														{{$res_t["id_r"]}} <br>
-														{{$res_t["id_c"]}} <br>
-														{{$res_t["from"]}} <br>
-														{{$res_t["to"]}} <br>
+														id: {{$res_t["id"]}} <br>
+														id pokoju: {{$res_t["id_r"]}} <br>
+														id klienta: {{$res_t["id_c"]}} <br>
+														od: {{$res_t["from"]}} <br>
+														do: {{$res_t["to"]}} <br>
 
                                                         </div>
 											
@@ -121,6 +125,6 @@
 			</div>
 		</div>
 	</div>
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</body>
 
 </html>

@@ -46,7 +46,21 @@
 										<div class="col-md-4">
 											<div class="form-group">
 											
-												<div class="text"> Stat: {{$stat}}</div>
+												<div class="text"> 
+
+													@if($stat=="Zajete") 
+
+														Ten pokój w tym terminie jest zajęty!
+
+													@else
+
+														Rezerwacja przepiegła pomyślnie!
+													
+													@endif
+
+												</div>
+
+												<a href="/"> Powrót</a>
 
 										</div>
 										

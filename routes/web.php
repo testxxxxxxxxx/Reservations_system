@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/',[App\Http\Controllers\PageRoomController::class,'index'])->name('index');
 
-Auth::routes();
+//Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('show_empty_room',[App\Http\Controllers\PageRoomController::class,'show_empty_room'])->name('show_empty_room');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('show_empty_room',[App\Http\Controllers\PageRoomController::class,'show_empty_room'])->name('show_empty_room');
 Route::get('insertCustomers',[App\Http\Controllers\PageRoomController::class,'insertCustomers'])->name("insertCustomers");
 Route::get('insertForReservation',[App\Http\Controllers\PageRoomController::class,'insertForReservation'])->name("insertForReservation");
 Route::get('searchRoom',[App\Http\Controllers\PageRoomController::class,'searchRoom'])->name('searchRoom');

@@ -18,60 +18,6 @@ class PageRoomController extends Controller
 
         return view('index');
     }
-    public function show_empty_room(Request $request)
-    {
-
-        $this->i=0;
-        $this->id=$request->input('id');
-        $this->od=$request->input('from');
-        $this->do_0=$request->input('to');
-        $rooms="";
-
-        $isFree=[
-            
-            "id"=>NULL,
-            "number"=>NULL,
-            "from"=>NULL,
-            "to"=>NULL
-
-        ];
-
-        $reservations=Reservation::get();
-        $rooms_0=Room::where('id',$this->id)->count();
-
-        if($rooms_0>0)
-        {
-
-            $rooms=Room::where('id',$this->id)->get();
-
-            foreach($reservations as $res)
-            {
-                foreach($rooms as $r)
-                {
-                    if($r->id===$res->id_r && $this->od===$res->from && $this->do_0===$res->to) 
-                    {
-                        $this->i++;
-
-                        $isFree["id"]=$r->id;
-                        $isFree["number"]=$r->number;
-                        $isFree["from"]=$res->from;
-                        $isFree["to"]=$res->to;
-
-                    }
-
-                }
-
-            }
-
-            if($this->i>0) $status="Zajete";
-            else $status="Wolne";
-
-        }
-        else $status="Room do not exists!";
-
-        return view('show_empty_room',compact('status','rooms','isFree'));
-
-    }
 
     public function is_Free()
     {
@@ -93,7 +39,14 @@ class PageRoomController extends Controller
 
         $this->d=0;
 
-        $reservations_0=Reservation::count();
+        $room_0=Room::where('number_people',$this->typeRoom)->get();
+
+        foreach($room_0 as $r)
+        {
+            $id_room_0=$r->id;
+        }
+
+        $reservations_0=Reservation::where('id_r',$id_room_0)->count();
 
         if($reservations_0===0) 
         {
@@ -147,8 +100,13 @@ class PageRoomController extends Controller
 
                     $this->glob_status_s=$status;
 
-            }
-            else $status="Room do not exists!";
+                }   
+                else 
+                {
+                    $status="Room do not exists!";
+
+                    
+                }
 
             $this->glob_status_e=$status;
 
@@ -173,6 +131,8 @@ class PageRoomController extends Controller
         $this->to=$request->input('to');
         $this->typeRoom=$request->input('typeRoom');
 
+        if($request->input('firstname')===NULL && $request->input('surname')===NULL && $request->input('number_phone')===NULL && $request->input('mail_address')===NULL && $request->input('from')===NULL && $request->input('to')===NULL) return redirect()->route('insertForReservation');
+
         $save=Customer::create([
 
             'firstname'=>$this->firstname,
@@ -185,9 +145,9 @@ class PageRoomController extends Controller
 
         $this->searchRoom();
 
-        echo $this->glob_status_s;
+        $stat=$this->glob_status_s;
 
-        if($this->glob_status_s==="Zajete") return redirect()->route("reservationResult");
+        if($this->glob_status_s==="Zajete" || $this->glob_status_s===NULL) return view('reservation_result',compact('stat'));
         else return $this->insertReservation();
 
     }
@@ -209,7 +169,7 @@ class PageRoomController extends Controller
             
         ]);
 
-        return redirect()->route("insertForReservation");
+        return redirect()->route('reservationResult');
 
     }
     public function searchRoom()
@@ -330,7 +290,7 @@ class PageRoomController extends Controller
         {
             $reservations=Reservation::where('id',$this->id)->update(['from'=>$this->currentDateFrom,'to'=>$this->currentDateTo]);
 
-            return 'from: '.$this->currentDateFrom;
+            return redirect()->route('canceledReservation');
 
         }
         else
